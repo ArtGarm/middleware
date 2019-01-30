@@ -5,12 +5,15 @@ import NameItem from './name.styled'
 
 class Item extends Component {
     render (){
+        var categories = this.props.categories.map( (item, index) => {
+            return (
+                <span key={index} > { item } </span>
+            ) 
+        })
         return (
             <ItemStyled className="item" key={this.props.id} >
-                <div className="con">
-                    <img src={ this.props.thumbnailUrl } alt="" />
-                </div>
-                <NameItem> { this.props.title } </NameItem>
+                <NameItem> { this.props.joke } </NameItem>
+                <div className="category"> {categories} </div>
             </ItemStyled>
         )
     }

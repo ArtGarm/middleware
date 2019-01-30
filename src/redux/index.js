@@ -1,41 +1,47 @@
 const API_CALL_REQUEST = "API_CALL_REQUEST";
-const API_CALL_SUCCESS = "API_CALL_SUCCESS";
-const API_CALL_FAILURE = "API_CALL_FAILURE";
+const API_CALL_SUCCESS_END = "API_CALL_SUCCESS_END";
+const API_CALL_ERROR_END = "API_CALL_ERROR_END";
 
-const SEND_SOME_EVENT = "SEND_SOME_EVENT"
-const AND_ITS_DIE = "AND_ITS_DIE"
+const LOAD_MORE_REQUEST = "LOAD_MORE_REQUEST"
+const LOAD_MORE_SUCCESS_END = "LOAD_MORE_SUCCESS_END"
+const LOAD_MORE_ERROR_END = "LOAD_MORE_ERROR_END"
 
-const FILTER_ELEMENTS = "FILTER_ELEMENTS"
+const SUBMIT_LOGIN_FORM_REQUEST = "SUBMIT_LOGIN_FORM_REQUEST"
+const SUBMIT_LOGIN_FORM_SUCCESS_END = "SUBMIT_LOGIN_FORM_SUCCESS_END"
+const SUBMIT_LOGIN_FORM_ERROR_END = "SUBMIT_LOGIN_FORM_ERROR_END"
 
 // reducer with initial state
 const initialState = {
   fetching: false,
-  dog: null,
+  joke: null,
   notFilteredDog : null,
-  error: null
+  error: null,
+  login : false,
+  user : {}
 };
 
 export function reducer(state = initialState, action) {
     switch (action.type) {
         case API_CALL_REQUEST:
             return { ...state, fetching: true, error: null };
-        case API_CALL_SUCCESS:
-            return { ...state, fetching: false, dog: action.dog , notFilteredDog: action.dog };
-        case API_CALL_FAILURE:
-            return { ...state, fetching: false, dog: null, error: action.error }
-        case SEND_SOME_EVENT:
-            return { ...state, fetching: false, dog: null, error: action.error };
-        case AND_ITS_DIE : 
-            return { ...state, fetching: true, dog: null, error: action.error };
-        case FILTER_ELEMENTS : {
-            var filterData = [];
-            state.notFilteredDog.forEach( item => {
-                if ( item.title.indexOf( action.payload ) !== -1 ) {
-                    filterData[filterData.length] = item
-                }
-            });
-            return { ...state, dog: filterData };
-        }
+        case API_CALL_SUCCESS_END:
+            return { ...state, fetching: false, joke: action.joke , notFilteredJoke: action.joke };
+        case API_CALL_ERROR_END:
+            return { ...state, fetching: false, joke: null, error: action.error }
+        case LOAD_MORE_REQUEST : 
+            return { ...state, fetching: true };        
+        case LOAD_MORE_SUCCESS_END : 
+            return { ...state, fetching: false, joke :  [ ...state.joke , ...action.more ] };
+        case LOAD_MORE_ERROR_END:
+            return { ...state, fetching: false, error: action.error }
+
+        case SUBMIT_LOGIN_FORM_REQUEST:
+            return { ...state, fetching: true }
+        case SUBMIT_LOGIN_FORM_SUCCESS_END:
+            return { ...state, fetching: false, login : true , user : action.more }
+        case SUBMIT_LOGIN_FORM_ERROR_END:
+            return { ...state, fetching: false, error: action.error , login : false  }
+            
         default:
             return state;
     }
